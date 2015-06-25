@@ -1,0 +1,24 @@
+rm(list = ls())
+library(BatteryMCMC)
+library(foreach)
+library(doMC)
+registerDoMC(cores=4)
+setmytheme()
+set.seed(17)
+setwd("~/Dropbox/Battery/")
+
+filename <- "u_mag1_size635"
+nparticles <- 128
+
+nruns <- 5
+niterations <- 20000
+
+for (i in 1:nruns){
+  load(file = paste0("Results/", filename, "_model1_uniformprior_preliminary.RData"))
+  modellist1 <- list(model = "model1", prior = "uniform")
+  algorithmic_parameters1 <- list(nparticles = nparticles, niterations = niterations, cholesky_proposal = cholesky_preliminary, initial_theta = theta_preliminary)
+  inputs1 <- list(current = synthetic_data$current, observations = synthetic_data$observations_model1, theta = synthetic_data$parameters)
+  results <- launch_pmmh(inputs1, modellist1, algorithmic_parameters1)
+  save(results, file = paste0("Results/", filename, "_run", i, "_model1_uniformprior_pmmh.RData"))
+}
+
