@@ -47,7 +47,6 @@ g
 qplot(x = 1:nrow(current), y = observations_model1[,1], geom = "line") + xlab("time") + ylab("observations")
 
 # now we want to do particle MCMC
-
 # initialize chain using a draw from the prior distribution
 Prior <- new(Module( "batterymodeluniformprior_module", PACKAGE = "BatteryMCMC")$BatteryModelUniformPrior)
 theta_init <- Prior$rprior()
@@ -70,3 +69,4 @@ cat("acceptance rate: ", 100*PMCMC$naccepts /PMCMC$niterations, "%\n")
 
 # generated chain
 matplot(PMCMC$chain_parameters)
+matplot(PMCMC$chain_parameters[,3])
